@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Selector</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .qrcode {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>WebSocket Prompt Selector</h1>
+  <p>Click a button to generate a QR code for the selected prompt.</p>
+
+  <!-- Buttons for prompts -->
+  <div id="prompt-buttons">
+    <!-- Buttons will be generated here -->
+  </div>
+
+  <!-- QR Code Display -->
+  <div id="qrcode" class="qrcode"></div>
+
+  <script>
+    // List of prompts
+    const prompts = ["bitcoin", "robot", "whale", "skunk", "bear", "bull", "rabbit"];
+    const websocketURL = "ws://yourserver:8765"; // Replace with your WebSocket URL
+
+    // Generate buttons dynamically
+    const buttonsContainer = document.getElementById('prompt-buttons');
+    prompts.forEach(prompt => {
+      const button = document.createElement('button');
+      button.textContent = prompt;
+      button.onclick = () => generateQRCode(prompt);
+      buttonsContainer.appendChild(button);
+    });
+
+    // Generate QR Code
+    function generateQRCode(prompt) {
+      const qrCodeDiv = document.getElementById('qrcode');
+      qrCodeDiv.innerHTML = ""; // Clear previous QR code
+      const url = `${websocketURL}?prompt=${prompt}`; // Encode prompt in URL
+      new QRCode(qrCodeDiv, {
+        text: url,
+        width: 200,
+        height: 200
+      });
+      alert(`Scan this QR code to send the prompt: "${prompt}"`);
+    }
+  </script>
+</body>
+</html>
